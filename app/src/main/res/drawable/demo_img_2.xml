@@ -1,0 +1,14 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="400dp"
+    android:height="400dp"
+    android:viewportWidth="400"
+    android:viewportHeight="400">
+    <!-- Demo image 2: cool ocean waves -->
+    <path android:fillColor="#0288D1" android:pathData="M0,0h400v400h-400z" />
+    <path android:fillColor="#039BE5" android:pathData="M0,0h400v300h-400z" />
+    <path android:fillColor="#4FC3F7" android:pathData="M0,0h400v180h-400z" />
+    <path android:fillColor="#B3E5FC" android:pathData="M0,0h400v80h-400z" />
+    <path android:fillColor="#FFFFFF" android:pathData="M0,230q50,-30 100,0t100,0t100,0t100,0v20q-50,30 -100,0t-100,0t-100,0t-100,0z" />
+    <path android:fillColor="#E1F5FE" android:pathData="M0,300q50,-30 100,0t100,0t100,0t100,0v20q-50,30 -100,0t-100,0t-100,0t-100,0z" />
+    <path android:fillColor="#01579B" android:pathData="M0,360h400v40h-400z" />
+</vector>

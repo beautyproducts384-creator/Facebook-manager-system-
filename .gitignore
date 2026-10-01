@@ -1,0 +1,28 @@
+# Gradle / Android
+.gradle/
+build/
+app/build/
+local.properties
+*.iml
+.idea/
+*.apk
+*.aab
+dist/
+
+# Kotlin
+*.class
+
+# Secrets — never commit real credentials
+.env
+*.env
+!.env.example
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Python (backend)
+backend/__pycache__/
+backend/.venv/
+backend/venv/
+*.pyc

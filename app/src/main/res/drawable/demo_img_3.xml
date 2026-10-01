@@ -1,0 +1,15 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="400dp"
+    android:height="400dp"
+    android:viewportWidth="400"
+    android:viewportHeight="400">
+    <!-- Demo image 3: fresh green hills -->
+    <path android:fillColor="#AED581" android:pathData="M0,0h400v400h-400z" />
+    <path android:fillColor="#9CCC65" android:pathData="M0,120h400v280h-400z" />
+    <path android:fillColor="#7CB342" android:pathData="M0,200q100,-60 200,0t200,0v200h-400z" />
+    <path android:fillColor="#558B2F" android:pathData="M0,290q100,-50 200,0t200,0v110h-400z" />
+    <path android:fillColor="#33691E" android:pathData="M60,220l14,-40 14,40 30,-8 -22,26 8,30 -30,-18 -30,18 8,-30 -22,-26z" />
+    <path android:fillColor="#33691E" android:pathData="M300,180l12,-34 12,34 26,-7 -19,22 7,26 -26,-15 -26,15 7,-26 -19,-22z" />
+    <path android:fillColor="#FFFFFF" android:pathData="M90,80q20,-25 45,-10t45,-5q25,10 10,30t-45,15t-50,-5q-20,-10 -5,-25z" />
+    <path android:fillColor="#FFFFFF" android:pathData="M250,50q18,-22 40,-8t40,-4q22,8 8,26t-40,13t-44,-4q-18,-9 -4,-23z" />
+</vector>

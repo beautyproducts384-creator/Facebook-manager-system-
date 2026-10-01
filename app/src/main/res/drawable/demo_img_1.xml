@@ -1,0 +1,13 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="400dp"
+    android:height="400dp"
+    android:viewportWidth="400"
+    android:viewportHeight="400">
+    <!-- Demo image 1: warm sunrise gradient blocks -->
+    <path android:fillColor="#FF8A65" android:pathData="M0,0h400v400h-400z" />
+    <path android:fillColor="#FFAB91" android:pathData="M0,0h400v260h-400z" />
+    <path android:fillColor="#FFE0B2" android:pathData="M0,0h400v140h-400z" />
+    <path android:fillColor="#FFD54F" android:pathData="M140,60m-60,0a60,60 0,1 1,120 0a60,60 0,1 1,-120 0" />
+    <path android:fillColor="#5D4037" android:pathData="M0,300l80,-60 80,40 60,-50 80,50 60,-30 40,20v130h-400z" />
+    <path android:fillColor="#3E2723" android:pathData="M0,340h400v60h-400z" />
+</vector>
