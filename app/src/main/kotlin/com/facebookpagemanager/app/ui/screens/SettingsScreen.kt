@@ -25,6 +25,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
@@ -37,6 +40,7 @@ import com.facebookpagemanager.app.di.AppContainer
 import com.facebookpagemanager.app.ui.components.SectionTitle
 import com.facebookpagemanager.app.ui.nav.Routes
 import com.facebookpagemanager.app.ui.util.fpmViewModel
+import com.facebookpagemanager.app.util.CrashReporter
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -304,6 +308,59 @@ fun SettingsScreen(navController: NavController) {
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.secondary
                     )
+                }
+            }
+            Spacer(Modifier.padding(8.dp))
+        }
+
+        item {
+            SectionTitle("Diagnostics")
+            Card(modifier = Modifier.fillMaxWidth()) {
+                Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    val context = LocalContext.current
+                    var report by remember { mutableStateOf(CrashReporter.readReport(context)) }
+                    var showReport by remember { mutableStateOf(false) }
+                    if (report != null) {
+                        Text(
+                            "A crash report was captured on this device. Open it, copy the text " +
+                                "and share it so the exact issue can be fixed.",
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Button(onClick = { showReport = true }) { Text("View crash report") }
+                            OutlinedButton(onClick = {
+                                CrashReporter.clearReport(context); report = null
+                            }) { Text("Clear") }
+                        }
+                    } else {
+                        Text(
+                            "No crashes recorded. If the app ever closes unexpectedly, " +
+                                "the technical details will appear here automatically.",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.secondary
+                        )
+                    }
+                    if (showReport && report != null) {
+                        val clipboard = LocalClipboardManager.current
+                        AlertDialog(
+                            onDismissRequest = { showReport = false },
+                            title = { Text("Crash report") },
+                            text = {
+                                LazyColumn {
+                                    item { Text(report!!, style = MaterialTheme.typography.bodySmall) }
+                                }
+                            },
+                            confirmButton = {
+                                TextButton(onClick = {
+                                    clipboard.setText(AnnotatedString(report!!))
+                                    showReport = false
+                                }) { Text("Copy") }
+                            },
+                            dismissButton = {
+                                TextButton(onClick = { showReport = false }) { Text("Close") }
+                            }
+                        )
+                    }
                 }
             }
             Spacer(Modifier.padding(8.dp))
