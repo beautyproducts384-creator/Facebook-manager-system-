@@ -54,6 +54,14 @@
             android:name="com.facebook.sdk.AdvertiserIDCollectionEnabled"
             android:value="false" />
 
+        <!-- Earliest crash-handler install: providers are created before
+             Application.onCreate(), so even a failure while loading the
+             Application class itself gets captured to the crash report. -->
+        <provider
+            android:name=".FpmInitProvider"
+            android:authorities="${applicationId}.FpmInitProvider"
+            android:exported="false" />
+
         <!-- Never let the Facebook SDK run at app startup: with no real App ID
              configured its init provider would crash the app on launch. We init
              manually in FacebookAuthManager.login() instead. -->
