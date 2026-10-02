@@ -20,8 +20,8 @@ android {
         applicationId = "com.facebookpagemanager.app"
         minSdk = 26
         targetSdk = 34
-        versionCode = 3
-        versionName = "1.0.2"
+        versionCode = 4
+        versionName = "1.0.3"
 
         manifestPlaceholders["facebookAppId"] = facebookAppId
         resValue("string", "facebook_app_id", facebookAppId)

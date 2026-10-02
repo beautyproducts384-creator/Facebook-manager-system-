@@ -1,6 +1,10 @@
 package com.facebookpagemanager.app.util
 
+import android.content.ContentValues
 import android.content.Context
+import android.os.Build
+import android.os.Environment
+import android.provider.MediaStore
 import android.util.Log
 import java.io.File
 import java.io.PrintWriter
@@ -25,13 +29,44 @@ object CrashReporter {
         Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->
             try {
                 val report = buildReport(throwable)
+                // 1) Private copy (viewable in Settings -> Diagnostics if the app opens).
                 File(appContext.filesDir, FILE_NAME).writeText(report)
+                // 2) Public copy in Downloads so the report can be opened with any
+                //    file manager even if the app never gets past the crash.
+                saveToDownloads(appContext, report)
                 Log.e(TAG, "Crash captured to $FILE_NAME", throwable)
             } catch (e: Exception) {
                 Log.e(TAG, "Failed to write crash report", e)
             }
             // Let the system handle it normally (app closes).
             previous?.uncaughtException(thread, throwable)
+        }
+    }
+
+    /**
+     * Saves a copy of [report] as FPM-crash-report.txt in the public Downloads
+     * folder (no storage permission needed on Android 10+).
+     */
+    private fun saveToDownloads(context: Context, report: String) {
+        try {
+            val values = ContentValues().apply {
+                put(MediaStore.MediaColumns.DISPLAY_NAME, "FPM-crash-report.txt")
+                put(MediaStore.MediaColumns.MIME_TYPE, "text/plain")
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
+                }
+            }
+            val collection = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                MediaStore.Downloads.EXTERNAL_CONTENT_URI
+            } else {
+                MediaStore.Files.getContentUri("external")
+            }
+            val uri = context.contentResolver.insert(collection, values) ?: return
+            context.contentResolver.openOutputStream(uri)?.use { os ->
+                os.write(report.toByteArray())
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to save crash report to Downloads", e)
         }
     }
 
