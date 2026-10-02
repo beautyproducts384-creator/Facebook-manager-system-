@@ -27,7 +27,9 @@ interface FacebookLoginHost {
 
 class MainActivity : ComponentActivity(), FacebookLoginHost {
 
-    private val callbackManager: CallbackManager = CallbackManager.Factory.create()
+    // Lazy: creating it touches the Facebook SDK, which we only initialize
+    // on demand (see FacebookAuthManager). Never at activity startup.
+    private val callbackManager: CallbackManager by lazy { CallbackManager.Factory.create() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

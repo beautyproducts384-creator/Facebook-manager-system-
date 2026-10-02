@@ -5,6 +5,7 @@ import android.content.Context
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
+import com.facebook.FacebookSdk
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.facebookpagemanager.app.BuildConfig
@@ -67,6 +68,16 @@ class FacebookAuthManager(
             )
             return
         }
+        // Lazy, guarded SDK init: only ever runs here, never at app startup.
+        try {
+            if (!FacebookSdk.isInitialized()) {
+                FacebookSdk.setApplicationId(BuildConfig.FACEBOOK_APP_ID)
+                FacebookSdk.sdkInitialize(context.applicationContext)
+            }
+        } catch (e: Exception) {
+            onError("Facebook SDK could not start: ${e.message}")
+            return
+        }
         LoginManager.getInstance().registerCallback(
             callbackManager,
             object : FacebookCallback<LoginResult> {
@@ -96,7 +107,13 @@ class FacebookAuthManager(
 
     /** Secure logout: ends the Facebook SDK session AND wipes all stored tokens. */
     fun logout() {
-        LoginManager.getInstance().logOut()
+        try {
+            if (FacebookSdk.isInitialized()) {
+                LoginManager.getInstance().logOut()
+            }
+        } catch (_: Exception) {
+            // SDK was never started (Demo Mode) — nothing to tear down.
+        }
         tokenStore.clear()
     }
 }

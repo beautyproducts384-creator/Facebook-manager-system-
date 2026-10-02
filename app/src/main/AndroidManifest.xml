@@ -37,19 +37,30 @@
         </activity>
 
         <!-- Official Facebook SDK: App ID comes from the facebook_app_id string
-             resource, which is generated from FACEBOOK_APP_ID at build time. -->
+             resource, which is generated from FACEBOOK_APP_ID at build time.
+             Auto-init is OFF on purpose: the SDK is initialized lazily only when the
+             user taps "Connect Facebook" AND a real numeric App ID was configured.
+             This guarantees the app opens fine (Demo Mode) with zero setup. -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
         <meta-data
             android:name="com.facebook.sdk.AutoInitEnabled"
-            android:value="true" />
+            android:value="false" />
         <meta-data
             android:name="com.facebook.sdk.AutoLogAppEventsEnabled"
             android:value="false" />
         <meta-data
             android:name="com.facebook.sdk.AdvertiserIDCollectionEnabled"
             android:value="false" />
+
+        <!-- Never let the Facebook SDK run at app startup: with no real App ID
+             configured its init provider would crash the app on launch. We init
+             manually in FacebookAuthManager.login() instead. -->
+        <provider
+            android:name="com.facebook.internal.FacebookInitProvider"
+            android:authorities="${applicationId}.FacebookInitProvider"
+            tools:node="remove" />
 
         <activity
             android:name="com.facebook.FacebookActivity"
